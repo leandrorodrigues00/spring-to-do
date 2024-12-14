@@ -17,14 +17,14 @@ public class UserController {
     private IUserRepository userRepository;
 
     @PostMapping("/")
-    public ResponseEntity create(@RequestBody UserModel userModel){
+    public ResponseEntity create(@RequestBody UserModel userModel) {
         var user = this.userRepository.findByUsername(userModel.getUsername());
 
-        if(user != null){
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe");
+        if (user != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário já existe");
         }
 
-       var passwordHashred = BCrypt.withDefaults().hashToString(12, userModel.getPassword().toCharArray());
+        var passwordHashred = BCrypt.withDefaults().hashToString(12, userModel.getPassword().toCharArray());
         userModel.setPassword(passwordHashred);
 
         var userCreated = this.userRepository.save(userModel);
